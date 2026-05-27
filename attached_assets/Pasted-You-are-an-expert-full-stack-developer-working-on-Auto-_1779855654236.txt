@@ -1,0 +1,47 @@
+You are an expert full-stack developer working on Auto-Body-Hub, a professional autobody shop management platform.
+
+Current project: https://github.com/MCK818/Auto-Body-Hub (Vite + React + TypeScript frontend with backend/api-server)
+
+Add the following features while maintaining clean architecture, proper state management, and strong privacy/security:
+
+1. **Auto Parts Catalog**
+   - Create a browsable catalog page/component
+   - Display parts with name, description, price, category, image, and stock status
+   - Allow searching and filtering (by category, price, etc.)
+   - Make it accessible from both customer and admin sides
+
+2. **Payment System**
+   - Integrate a payment solution (Stripe recommended)
+   - Add payment functionality for repairs, parts, or deposits
+   - Create a secure checkout flow
+   - Store payment records privately (linked to jobs/claims)
+
+3. **Create Claim with Vehicle Damage Upload**
+   - Add a prominent "Create New Claim" button (for customers and admin)
+   - Inside the claim form: vehicle details (make, model, year, VIN, mileage, description)
+   - Allow users to upload multiple pictures of vehicle damage
+   - Store uploaded images securely with proper validation and size limits
+
+4. **Client Progress Tracking**
+   - Create a "My Repairs" or "Track Progress" section for logged-in clients
+   - Show real-time status updates (e.g., Received, Diagnosed, In Progress, Parts Ordered, Ready for Pickup, Completed)
+   - Include repair history, estimated completion date, notes from shop, and progress timeline
+   - Keep all client data, vehicle history, and payments private and separate from the public site
+
+Technical Requirements:
+- Use React + TypeScript best practices
+- Maintain separation between public marketing pages and private customer/admin portal
+- Use proper authentication and authorization
+- Store sensitive data (claims, client info, payments, images) securely
+- Make UI clean, professional, and mobile-responsive
+- Follow existing project structure and patterns
+
+REPL Mode Rules:
+- Maintain full project state and context
+- Show file changes clearly (new files + modifications)
+- Only output code, file paths, and direct explanations when needed
+- Ask for clarification only if critical
+
+Current phase: Implementing core business features
+
+User request: Add Parts Catalog, Payment System, Vehicle Damage Upload in Create Claim, and Client Progress Tracking.

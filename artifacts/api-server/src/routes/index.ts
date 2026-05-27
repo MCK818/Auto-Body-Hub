@@ -6,6 +6,8 @@ import checkinsRouter from "./checkins";
 import partsRouter from "./parts";
 import paymentsRouter from "./payments";
 import dashboardRouter from "./dashboard";
+import claimsRouter from "./claims";
+import trackRouter from "./track";
 
 const router: IRouter = Router();
 
@@ -16,5 +18,7 @@ router.use("/checkins", checkinsRouter);
 router.use("/parts", partsRouter);
 router.use("/payments", paymentsRouter);
 router.use("/dashboard", dashboardRouter);
+router.use("/claims", claimsRouter);
+router.use("/track", trackRouter);
 
 export default router;

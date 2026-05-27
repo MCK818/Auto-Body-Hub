@@ -16,13 +16,16 @@ export default function Home() {
                 Expert collision repair, painting, and restoration. We get your vehicle back on the road looking brand new.
               </p>
             </div>
-            <div className="space-x-4">
-              <Link href="/track" className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Link href="/claim" className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
+                Submit a Claim
+              </Link>
+              <Link href="/track" className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8">
                 Track Your Repair
               </Link>
-              <Button variant="outline" className="h-11 px-8">
-                Contact Us
-              </Button>
+              <Link href="/parts" className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8">
+                Parts Catalog
+              </Link>
             </div>
           </div>
         </div>

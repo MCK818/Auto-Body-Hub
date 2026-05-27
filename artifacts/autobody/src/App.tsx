@@ -12,6 +12,8 @@ import AdminLayout from "@/components/AdminLayout";
 // Public Pages
 import Home from "@/pages/Home";
 import Track from "@/pages/Track";
+import Claim from "@/pages/Claim";
+import PublicParts from "@/pages/PublicParts";
 
 // Admin Pages
 import Login from "@/pages/admin/Login";
@@ -51,6 +53,8 @@ function Router() {
       {/* Public Routes */}
       <Route path="/" component={() => <PublicLayout><Home /></PublicLayout>} />
       <Route path="/track" component={() => <PublicLayout><Track /></PublicLayout>} />
+      <Route path="/claim" component={() => <PublicLayout><Claim /></PublicLayout>} />
+      <Route path="/parts" component={() => <PublicLayout><PublicParts /></PublicLayout>} />
 
       {/* Admin Routes */}
       <Route path="/admin/login" component={Login} />

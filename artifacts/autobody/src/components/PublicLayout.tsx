@@ -11,10 +11,16 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <span>Apex AutoBody</span>
           </Link>
           <nav className="flex items-center gap-6">
+            <Link href="/parts" className="text-sm font-medium hover:text-primary transition-colors">
+              Parts
+            </Link>
             <Link href="/track" className="text-sm font-medium hover:text-primary transition-colors">
               Track Repair
             </Link>
-            <Link href="/admin/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/claim" className="text-sm font-medium bg-primary text-primary-foreground px-4 py-1.5 rounded-md hover:bg-primary/90 transition-colors">
+              Submit Claim
+            </Link>
+            <Link href="/admin/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden md:block">
               Staff Portal
             </Link>
           </nav>
