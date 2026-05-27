@@ -1,7 +1,10 @@
+import { useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Activity, CarFront, DollarSign, Users, Wrench } from "lucide-react";
+import { CarFront, DollarSign, Users, Wrench } from "lucide-react";
 
 export default function Dashboard() {
+  const [, setLocation] = useLocation();
+
   return (
     <div className="space-y-8">
       <div>
@@ -83,7 +86,7 @@ export default function Dashboard() {
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
-            <button className="w-full flex items-center gap-3 p-4 rounded-lg border bg-card hover:bg-accent transition-colors text-left">
+            <button onClick={() => setLocation("/admin/checkins")} className="w-full flex items-center gap-3 p-4 rounded-lg border bg-card hover:bg-accent transition-colors text-left">
               <div className="bg-primary/20 p-2 rounded-md">
                 <CarFront className="h-5 w-5 text-primary" />
               </div>
@@ -92,7 +95,7 @@ export default function Dashboard() {
                 <div className="text-sm text-muted-foreground">Receive a vehicle</div>
               </div>
             </button>
-            <button className="w-full flex items-center gap-3 p-4 rounded-lg border bg-card hover:bg-accent transition-colors text-left">
+            <button onClick={() => setLocation("/admin/clients")} className="w-full flex items-center gap-3 p-4 rounded-lg border bg-card hover:bg-accent transition-colors text-left">
               <div className="bg-primary/20 p-2 rounded-md">
                 <Users className="h-5 w-5 text-primary" />
               </div>
