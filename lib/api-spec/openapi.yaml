@@ -1,22 +1,34 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Autobody Shop API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: clients
+    description: Client management
+  - name: vehicles
+    description: Vehicle management
+  - name: checkins
+    description: Check-in management
+  - name: parts
+    description: Parts catalog
+  - name: payments
+    description: Payment management
+  - name: repairs
+    description: Repair updates
+  - name: dashboard
+    description: Dashboard summaries
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +36,598 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # --- Clients ---
+  /clients:
+    get:
+      operationId: listClients
+      tags: [clients]
+      summary: List all clients
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of clients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Client"
+    post:
+      operationId: createClient
+      tags: [clients]
+      summary: Create a client
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Client"
+
+  /clients/{id}:
+    get:
+      operationId: getClient
+      tags: [clients]
+      summary: Get a client
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Client
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Client"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateClient
+      tags: [clients]
+      summary: Update a client
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Client"
+    delete:
+      operationId: deleteClient
+      tags: [clients]
+      summary: Delete a client
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # --- Vehicles ---
+  /vehicles:
+    get:
+      operationId: listVehicles
+      tags: [vehicles]
+      summary: List all vehicles
+      parameters:
+        - name: clientId
+          in: query
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of vehicles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vehicle"
+    post:
+      operationId: createVehicle
+      tags: [vehicles]
+      summary: Create a vehicle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VehicleInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+
+  /vehicles/{id}:
+    get:
+      operationId: getVehicle
+      tags: [vehicles]
+      summary: Get a vehicle
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateVehicle
+      tags: [vehicles]
+      summary: Update a vehicle
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VehicleUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+    delete:
+      operationId: deleteVehicle
+      tags: [vehicles]
+      summary: Delete a vehicle
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /vehicles/{id}/photos:
+    get:
+      operationId: listVehiclePhotos
+      tags: [vehicles]
+      summary: List photos for a vehicle
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of photos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VehiclePhoto"
+    post:
+      operationId: addVehiclePhoto
+      tags: [vehicles]
+      summary: Add a photo to a vehicle
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VehiclePhotoInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VehiclePhoto"
+
+  # --- Check-ins ---
+  /checkins:
+    get:
+      operationId: listCheckins
+      tags: [checkins]
+      summary: List all check-ins
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: clientId
+          in: query
+          schema:
+            type: integer
+        - name: vehicleId
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of check-ins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Checkin"
+    post:
+      operationId: createCheckin
+      tags: [checkins]
+      summary: Create a check-in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckinInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Checkin"
+
+  /checkins/{id}:
+    get:
+      operationId: getCheckin
+      tags: [checkins]
+      summary: Get a check-in
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Check-in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Checkin"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateCheckin
+      tags: [checkins]
+      summary: Update a check-in
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckinUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Checkin"
+
+  # --- Repair Updates ---
+  /checkins/{id}/updates:
+    get:
+      operationId: listRepairUpdates
+      tags: [repairs]
+      summary: List repair updates for a check-in
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Repair updates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RepairUpdate"
+    post:
+      operationId: addRepairUpdate
+      tags: [repairs]
+      summary: Add a repair update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RepairUpdateInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RepairUpdate"
+
+  # --- Parts Catalog ---
+  /parts:
+    get:
+      operationId: listParts
+      tags: [parts]
+      summary: List all parts
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Parts list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Part"
+    post:
+      operationId: createPart
+      tags: [parts]
+      summary: Create a part
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PartInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Part"
+
+  /parts/{id}:
+    get:
+      operationId: getPart
+      tags: [parts]
+      summary: Get a part
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Part
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Part"
+        "404":
+          description: Not found
+    patch:
+      operationId: updatePart
+      tags: [parts]
+      summary: Update a part
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PartUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Part"
+    delete:
+      operationId: deletePart
+      tags: [parts]
+      summary: Delete a part
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # --- Payments ---
+  /payments:
+    get:
+      operationId: listPayments
+      tags: [payments]
+      summary: List all payments
+      parameters:
+        - name: clientId
+          in: query
+          schema:
+            type: integer
+        - name: checkinId
+          in: query
+          schema:
+            type: integer
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Payments list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Payment"
+    post:
+      operationId: createPayment
+      tags: [payments]
+      summary: Create a payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+
+  /payments/{id}:
+    get:
+      operationId: getPayment
+      tags: [payments]
+      summary: Get a payment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Payment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+        "404":
+          description: Not found
+    patch:
+      operationId: updatePayment
+      tags: [payments]
+      summary: Update a payment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+
+  # --- Dashboard ---
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get dashboard summary stats
+      responses:
+        "200":
+          description: Summary stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /dashboard/recent-activity:
+    get:
+      operationId: getRecentActivity
+      tags: [dashboard]
+      summary: Get recent check-ins and updates
+      responses:
+        "200":
+          description: Recent activity
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityItem"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +638,390 @@ components:
       required:
         - status
 
+    Client:
+      type: object
+      required: [id, name, email, phone, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    ClientInput:
+      type: object
+      required: [name, email, phone]
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        notes:
+          type: string
+
+    ClientUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        notes:
+          type: string
+
+    Vehicle:
+      type: object
+      required: [id, clientId, make, model, year, licensePlate, createdAt]
+      properties:
+        id:
+          type: integer
+        clientId:
+          type: integer
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: integer
+        licensePlate:
+          type: string
+        vin:
+          type: ["string", "null"]
+        color:
+          type: ["string", "null"]
+        mileage:
+          type: ["integer", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    VehicleInput:
+      type: object
+      required: [clientId, make, model, year, licensePlate]
+      properties:
+        clientId:
+          type: integer
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: integer
+        licensePlate:
+          type: string
+        vin:
+          type: string
+        color:
+          type: string
+        mileage:
+          type: integer
+        notes:
+          type: string
+
+    VehicleUpdate:
+      type: object
+      properties:
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: integer
+        licensePlate:
+          type: string
+        vin:
+          type: string
+        color:
+          type: string
+        mileage:
+          type: integer
+        notes:
+          type: string
+
+    VehiclePhoto:
+      type: object
+      required: [id, vehicleId, url, caption, createdAt]
+      properties:
+        id:
+          type: integer
+        vehicleId:
+          type: integer
+        url:
+          type: string
+        caption:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    VehiclePhotoInput:
+      type: object
+      required: [url]
+      properties:
+        url:
+          type: string
+        caption:
+          type: string
+
+    Checkin:
+      type: object
+      required: [id, clientId, vehicleId, status, description, droppedOffAt, createdAt]
+      properties:
+        id:
+          type: integer
+        clientId:
+          type: integer
+        vehicleId:
+          type: integer
+        status:
+          type: string
+          enum: [pending, in_progress, waiting_parts, ready, completed, cancelled]
+        description:
+          type: string
+        estimatedCost:
+          type: ["number", "null"]
+        droppedOffAt:
+          type: string
+        estimatedCompletionDate:
+          type: ["string", "null"]
+        completedAt:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    CheckinInput:
+      type: object
+      required: [clientId, vehicleId, description, droppedOffAt]
+      properties:
+        clientId:
+          type: integer
+        vehicleId:
+          type: integer
+        description:
+          type: string
+        estimatedCost:
+          type: number
+        droppedOffAt:
+          type: string
+        estimatedCompletionDate:
+          type: string
+        notes:
+          type: string
+
+    CheckinUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, in_progress, waiting_parts, ready, completed, cancelled]
+        description:
+          type: string
+        estimatedCost:
+          type: number
+        estimatedCompletionDate:
+          type: string
+        completedAt:
+          type: string
+        notes:
+          type: string
+
+    RepairUpdate:
+      type: object
+      required: [id, checkinId, message, createdAt]
+      properties:
+        id:
+          type: integer
+        checkinId:
+          type: integer
+        message:
+          type: string
+        status:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    RepairUpdateInput:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+        status:
+          type: string
+          enum: [pending, in_progress, waiting_parts, ready, completed, cancelled]
+
+    Part:
+      type: object
+      required: [id, name, partNumber, category, price, quantity, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        partNumber:
+          type: string
+        category:
+          type: string
+        description:
+          type: ["string", "null"]
+        price:
+          type: number
+        quantity:
+          type: integer
+        supplier:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    PartInput:
+      type: object
+      required: [name, partNumber, category, price, quantity]
+      properties:
+        name:
+          type: string
+        partNumber:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        quantity:
+          type: integer
+        supplier:
+          type: string
+
+    PartUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        partNumber:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        quantity:
+          type: integer
+        supplier:
+          type: string
+
+    Payment:
+      type: object
+      required: [id, clientId, checkinId, amount, status, method, createdAt]
+      properties:
+        id:
+          type: integer
+        clientId:
+          type: integer
+        checkinId:
+          type: integer
+        amount:
+          type: number
+        status:
+          type: string
+          enum: [pending, paid, partial, refunded]
+        method:
+          type: ["string", "null"]
+          enum: [cash, card, check, financing, null]
+        notes:
+          type: ["string", "null"]
+        paidAt:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    PaymentInput:
+      type: object
+      required: [clientId, checkinId, amount, status]
+      properties:
+        clientId:
+          type: integer
+        checkinId:
+          type: integer
+        amount:
+          type: number
+        status:
+          type: string
+          enum: [pending, paid, partial, refunded]
+        method:
+          type: string
+          enum: [cash, card, check, financing]
+        notes:
+          type: string
+        paidAt:
+          type: string
+
+    PaymentUpdate:
+      type: object
+      properties:
+        amount:
+          type: number
+        status:
+          type: string
+          enum: [pending, paid, partial, refunded]
+        method:
+          type: string
+          enum: [cash, card, check, financing]
+        notes:
+          type: string
+        paidAt:
+          type: string
+
+    DashboardSummary:
+      type: object
+      required: [totalClients, totalVehicles, activeCheckins, completedThisMonth, revenue, pendingPayments, partsInStock]
+      properties:
+        totalClients:
+          type: integer
+        totalVehicles:
+          type: integer
+        activeCheckins:
+          type: integer
+        completedThisMonth:
+          type: integer
+        revenue:
+          type: number
+        pendingPayments:
+          type: number
+        partsInStock:
+          type: integer
+
+    ActivityItem:
+      type: object
+      required: [id, type, title, description, timestamp]
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [checkin, update, payment, completion]
+        title:
+          type: string
+        description:
+          type: string
+        timestamp:
+          type: string
